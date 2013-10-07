@@ -1,0 +1,33 @@
+{
+    "name": "anh/markup-bundle",
+    "type": "symfony-bundle",
+    "description": "Markup bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrew Hilobok",
+            "email": "hilobok@gmail.com"
+        }
+    ],
+
+    "require": {
+        "mjohnson/decoda": "~6.2"
+    },
+
+    "minimum-stability": "stable",
+
+    "autoload":{
+        "psr-0":{
+            "Anh\\Bundle\\MarkupBundle": ""
+        }
+    },
+
+    "target-dir": "Anh/Bundle/MarkupBundle",
+
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
+
