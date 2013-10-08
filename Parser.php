@@ -15,7 +15,7 @@ class Parser
         $this->dispatcher = $dispatcher;
     }
 
-    public function create($type, $markup, $options)
+    public function create($type, $markup, $options =  array())
     {
         $event = new MarkupCreateEvent($type, $markup, $options);
         $this->dispatcher->dispatch(MarkupEvent::CREATE, $event);
@@ -23,7 +23,7 @@ class Parser
         return $event->getParser();
     }
 
-    public function parse($type, $markup, $options)
+    public function parse($type, $markup, $options = array())
     {
         $parser = $this->create($type, $markup, $options);
 
@@ -35,7 +35,7 @@ class Parser
         return $event->getText();
     }
 
-    public function validate($type, $markup, $options)
+    public function validate($type, $markup, $options = array())
     {
         $parser = $this->create($type, $markup, $options);
 

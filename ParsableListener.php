@@ -36,21 +36,21 @@ class ParsableListener implements EventSubscriber
 
     public function postPersist(LifecycleEventArgs $args)
     {
-        $em = $args->getEntityManager();
         $entity = $args->getEntity();
-
-        $entityClass = get_class($entity);
-
-        $meta = $em->getClassMetadata($entityClass);
-
         $annotations = $this->getAnnotations($entity);
-        $entityMasterFields = method_exists($entity, 'getMarkupMasterFields') ? $entity->getMarkupMasterFields() : array();
+
+        if (empty($annotations)) {
+            return;
+        }
+
+        $em = $args->getEntityManager();
+        $meta = $em->getClassMetadata(get_class($entity));
+        $markupExtraFields = method_exists($entity, 'getMarkupExtraFields') ? $entity->getMarkupExtraFields() : array();
 
         foreach ($annotations as $fieldName => $annotation) {
             $markup = $meta->getReflectionProperty($annotation->field)->getValue($entity);
-
             $options = (array) $annotation->options + array(
-                'extra' => $entityMasterFields
+                'extra' => $markupExtraFields
             );
 
             $text = $this->parser->parse($annotation->type, $markup, $options);
@@ -66,17 +66,18 @@ class ParsableListener implements EventSubscriber
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
             $annotations = $this->getAnnotations($entity);
 
-            $entityClass = get_class($entity);
+            if (empty($annotations)) {
+                continue;
+            }
 
-            $meta = $em->getClassMetadata($entityClass);
-
-            $entityMasterFields = method_exists($entity, 'getMarkupMasterFields') ? $entity->getMarkupMasterFields() : array();
+            $meta = $em->getClassMetadata(get_class($entity));
+            $markupExtraFields = method_exists($entity, 'getMarkupExtraFields') ? $entity->getMarkupExtraFields() : array();
 
             $changedFields = array_keys($uow->getEntityChangeSet($entity));
 
             foreach ($annotations as $fieldName => $annotation) {
                 $masterFields = array_merge(
-                    array_keys($entityMasterFields),
+                    array_keys($markupExtraFields),
                     array($annotation->field)
                 );
 
@@ -85,17 +86,15 @@ class ParsableListener implements EventSubscriber
                 }
 
                 $markup = $meta->getReflectionProperty($annotation->field)->getValue($entity);
-
                 $options = (array) $annotation->options + array(
-                    'extra' => $entityMasterFields
+                    'extra' => $markupExtraFields
                 );
 
                 $text = $this->parser->parse($annotation->type, $markup, $options);
-
                 $meta->getReflectionProperty($fieldName)->setValue($entity, $text);
-
-                $uow->recomputeSingleEntityChangeSet($meta, $entity);
             }
+
+            $uow->recomputeSingleEntityChangeSet($meta, $entity);
         }
     }
 
