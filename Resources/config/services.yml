@@ -1,6 +1,5 @@
 parameters:
-    anh_markup.parsable.class: Anh\Bundle\MarkupBundle\EventListener\Parsable
-    anh_markup.bbcode_parser.class: Anh\Bundle\MarkupBundle\EventListener\BbcodeParser
+    anh_markup.parsable.class: Anh\Bundle\MarkupBundle\ParsableListener
     anh_markup.validator.class: Anh\Bundle\MarkupBundle\Validator\MarkupValidator
     anh_markup.parser.class: Anh\Bundle\MarkupBundle\Parser
 
@@ -24,9 +23,3 @@ services:
         class: %anh_markup.parser.class%
         arguments:
             - @event_dispatcher
-
-    anh_markup.bbcode_parser:
-        class: %anh_markup.bbcode_parser.class%
-        tags:
-            - { name: kernel.event_subscriber }
-

@@ -17,7 +17,7 @@ final class Parsable extends Annotation
      * @var string
      * @required
      */
-    public $type = 'bbcode';
+    public $type = '';
 
     /**
      * Source field from where markup will be parsed

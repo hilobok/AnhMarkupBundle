@@ -1,6 +1,6 @@
 <?php
 
-namespace Anh\Bundle\MarkupBundle\EventListener;
+namespace Anh\Bundle\MarkupBundle;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
@@ -8,7 +8,7 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Anh\Bundle\MarkupBundle\Parser;
 
-class Parsable implements EventSubscriber
+class ParsableListener implements EventSubscriber
 {
     /**
      * Annotation reader service
