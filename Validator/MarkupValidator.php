@@ -15,9 +15,13 @@ class MarkupValidator extends ConstraintValidator
         $this->parser = $parser;
     }
 
-    public function validate($text, Constraint $constraint)
+    public function validate($markup, Constraint $constraint)
     {
-        $errors = (array) $this->parser->validate($constraint->type, $text, array());
+        $errors = (array) $this->parser->validate(
+            $constraint->type,
+            $markup,
+            $constraint->options
+        );
 
         foreach ($errors as $message) {
             $this->context->addViolation($message);
