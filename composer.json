@@ -17,11 +17,11 @@
 
     "autoload":{
         "psr-0":{
-            "Anh\\Bundle\\MarkupBundle": ""
+            "Anh\\MarkupBundle": ""
         }
     },
 
-    "target-dir": "Anh/Bundle/MarkupBundle",
+    "target-dir": "Anh/MarkupBundle",
 
     "extra": {
         "branch-alias": {

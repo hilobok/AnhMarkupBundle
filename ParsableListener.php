@@ -1,12 +1,12 @@
 <?php
 
-namespace Anh\Bundle\MarkupBundle;
+namespace Anh\MarkupBundle;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Anh\Bundle\MarkupBundle\Parser;
+use Anh\MarkupBundle\Parser;
 
 class ParsableListener implements EventSubscriber
 {
@@ -107,7 +107,7 @@ class ParsableListener implements EventSubscriber
         foreach ($reflection->getProperties() as $field) {
             $annotation = $this->reader->getPropertyAnnotation(
                 $field,
-                'Anh\Bundle\MarkupBundle\Mapping\Annotation\Parsable'
+                'Anh\MarkupBundle\Mapping\Annotation\Parsable'
             );
 
             if ($annotation !== null) {

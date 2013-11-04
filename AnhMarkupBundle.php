@@ -1,6 +1,6 @@
 <?php
 
-namespace Anh\Bundle\MarkupBundle;
+namespace Anh\MarkupBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

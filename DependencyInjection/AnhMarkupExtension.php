@@ -1,6 +1,6 @@
 <?php
 
-namespace Anh\Bundle\MarkupBundle\DependencyInjection;
+namespace Anh\MarkupBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;

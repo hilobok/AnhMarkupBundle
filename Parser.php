@@ -1,12 +1,12 @@
 <?php
 
-namespace Anh\Bundle\MarkupBundle;
+namespace Anh\MarkupBundle;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Anh\Bundle\MarkupBundle\Event\MarkupEvent;
-use Anh\Bundle\MarkupBundle\Event\MarkupCreateEvent;
-use Anh\Bundle\MarkupBundle\Event\MarkupParseEvent;
-use Anh\Bundle\MarkupBundle\Event\MarkupValidateEvent;
+use Anh\MarkupBundle\Event\MarkupEvent;
+use Anh\MarkupBundle\Event\MarkupCreateEvent;
+use Anh\MarkupBundle\Event\MarkupParseEvent;
+use Anh\MarkupBundle\Event\MarkupValidateEvent;
 
 class Parser
 {

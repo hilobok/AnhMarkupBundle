@@ -1,6 +1,6 @@
 <?php
 
-namespace Anh\Bundle\MarkupBundle\Event;
+namespace Anh\MarkupBundle\Event;
 
 class MarkupParseEvent extends MarkupEvent
 {

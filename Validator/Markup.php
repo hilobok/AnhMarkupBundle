@@ -1,6 +1,6 @@
 <?php
 
-namespace Anh\Bundle\MarkupBundle\Validator;
+namespace Anh\MarkupBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 

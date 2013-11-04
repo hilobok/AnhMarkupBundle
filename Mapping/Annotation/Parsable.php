@@ -1,6 +1,6 @@
 <?php
 
-namespace Anh\Bundle\MarkupBundle\Mapping\Annotation;
+namespace Anh\MarkupBundle\Mapping\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 
