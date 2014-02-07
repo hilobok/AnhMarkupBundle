@@ -9,6 +9,7 @@ class MarkupEvent extends Event
     const CREATE = 'anh_markup.create';
     const PARSE = 'anh_markup.parse';
     const VALIDATE = 'anh_markup.validate';
+    const COMMAND = 'anh_markup.command';
 
     protected $type;
     protected $markup;

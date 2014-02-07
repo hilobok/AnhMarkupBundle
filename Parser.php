@@ -7,6 +7,7 @@ use Anh\MarkupBundle\Event\MarkupEvent;
 use Anh\MarkupBundle\Event\MarkupCreateEvent;
 use Anh\MarkupBundle\Event\MarkupParseEvent;
 use Anh\MarkupBundle\Event\MarkupValidateEvent;
+use Anh\MarkupBundle\Event\MarkupCommandEvent;
 
 class Parser
 {
@@ -15,7 +16,7 @@ class Parser
         $this->dispatcher = $dispatcher;
     }
 
-    public function create($type, $markup, $options =  array())
+    public function create($type, $markup = '', $options = array())
     {
         $event = new MarkupCreateEvent($type, $markup, $options);
         $this->dispatcher->dispatch(MarkupEvent::CREATE, $event);
@@ -45,5 +46,17 @@ class Parser
         $this->dispatcher->dispatch(MarkupEvent::VALIDATE, $event);
 
         return $event->getErrors();
+    }
+
+    public function command($command, $type, $markup = '', $options = array())
+    {
+        $parser = $this->create($type, $markup, $options);
+
+        $event = new MarkupCommandEvent($command, $type, $markup, $options);
+        $event->setParser($parser);
+
+        $this->dispatcher->dispatch(MarkupEvent::COMMAND, $event);
+
+        return $event->getResult();
     }
 }
