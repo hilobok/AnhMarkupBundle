@@ -1,13 +1,13 @@
 <?php
 
-namespace Anh\MarkupBundle\Validator;
+namespace Anh\MarkupBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 
 /**
  * @Annotation
  */
-class Markup extends Constraint
+class MarkupIsValid extends Constraint
 {
     /**
      * Parser type

@@ -1,12 +1,12 @@
 <?php
 
-namespace Anh\MarkupBundle\Validator;
+namespace Anh\MarkupBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Constraint;
 use Anh\MarkupBundle\Parser;
 
-class MarkupValidator extends ConstraintValidator
+class MarkupIsValidValidator extends ConstraintValidator
 {
     protected $parser;
 

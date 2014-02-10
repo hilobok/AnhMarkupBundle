@@ -1,6 +1,6 @@
 parameters:
     anh_markup.parsable.class: Anh\MarkupBundle\ParsableListener
-    anh_markup.validator.class: Anh\MarkupBundle\Validator\MarkupValidator
+    anh_markup.validator.class: Anh\MarkupBundle\Validator\Constraints\MarkupIsValidValidator
     anh_markup.parser.class: Anh\MarkupBundle\Parser
 
 services:
