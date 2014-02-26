@@ -37,26 +37,14 @@ class ParsableListener implements EventSubscriber
     public function postPersist(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        $annotations = $this->getAnnotations($entity);
+        $meta = $args->getEntityManager()
+            ->getClassMetadata(get_class($entity))
+        ;
 
-        if (empty($annotations)) {
-            return;
+        if ($this->process($entity, $meta)) {
+            $args->getEntityManager()->flush($entity);
         }
-
-        $em = $args->getEntityManager();
-        $meta = $em->getClassMetadata(get_class($entity));
-        $markupData = method_exists($entity, 'getMarkupData') ? $entity->getMarkupData() : array();
-
-        foreach ($annotations as $fieldName => $annotation) {
-            $markup = $meta->getReflectionProperty($annotation->field)->getValue($entity);
-            $options = (array) $annotation->options + array(
-                'data' => $markupData
-            );
-
-            $text = $this->parser->parse($annotation->type, $markup, $options);
-            $meta->getReflectionProperty($fieldName)->setValue($entity, $text);
-        }
-   }
+    }
 
     public function onFlush(OnFlushEventArgs $args)
     {
@@ -64,38 +52,35 @@ class ParsableListener implements EventSubscriber
         $uow = $em->getUnitOfWork();
 
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
-            $annotations = $this->getAnnotations($entity);
-
-            if (empty($annotations)) {
-                continue;
-            }
-
             $meta = $em->getClassMetadata(get_class($entity));
-            $markupData = method_exists($entity, 'getMarkupData') ? $entity->getMarkupData() : array();
-
-            $changedFields = array_keys($uow->getEntityChangeSet($entity));
-
-            foreach ($annotations as $fieldName => $annotation) {
-                $masterFields = array_merge(
-                    array_keys($markupData),
-                    array($annotation->field)
-                );
-
-                if (!array_intersect($masterFields, $changedFields)) {
-                    continue;
-                }
-
-                $markup = $meta->getReflectionProperty($annotation->field)->getValue($entity);
-                $options = (array) $annotation->options + array(
-                    'data' => $markupData
-                );
-
-                $text = $this->parser->parse($annotation->type, $markup, $options);
-                $meta->getReflectionProperty($fieldName)->setValue($entity, $text);
+            if ($this->process($entity, $meta)) {
+                $uow->recomputeSingleEntityChangeSet($meta, $entity);
             }
-
-            $uow->recomputeSingleEntityChangeSet($meta, $entity);
         }
+    }
+
+    protected function process($entity, $meta)
+    {
+        $annotations = $this->getAnnotations($entity);
+
+        if (empty($annotations)) {
+            return false;
+        }
+
+        foreach ($annotations as $fieldName => $annotation) {
+            $markup = $meta
+                ->getReflectionProperty($annotation->field)
+                ->getValue($entity)
+            ;
+            $options = (array) $annotation->options + array(
+                'entity' => $entity
+            );
+
+            $text = $this->parser->parse($annotation->type, $markup, $options);
+            $meta->getReflectionProperty($fieldName)->setValue($entity, $text);
+        }
+
+        return true;
     }
 
     private function getAnnotations($entity)
