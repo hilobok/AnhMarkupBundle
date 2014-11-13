@@ -1,6 +1,6 @@
 <?php
 
-namespace Anh\MarkupBundle;
+namespace Anh\MarkupBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
@@ -10,7 +10,7 @@ use Anh\MarkupBundle\Parser;
 use Anh\MarkupBundle\Mapping\Annotation\Parsable;
 use Anh\MarkupBundle\Mapping\Annotation\Countable;
 
-class ParsableListener implements EventSubscriber
+class MarkupListener implements EventSubscriber
 {
     /**
      * Annotation reader service

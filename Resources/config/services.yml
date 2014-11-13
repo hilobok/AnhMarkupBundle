@@ -1,11 +1,11 @@
 parameters:
-    anh_markup.parsable.class: Anh\MarkupBundle\ParsableListener
+    anh_markup.event_listener.class: Anh\MarkupBundle\EventListener\MarkupListener
     anh_markup.validator.class: Anh\MarkupBundle\Validator\Constraints\MarkupIsValidValidator
     anh_markup.parser.class: Anh\MarkupBundle\Parser
 
 services:
-    anh_markup.parsable:
-        class: %anh_markup.parsable.class%
+    anh_markup.event_listener:
+        class: %anh_markup.event_listener.class%
         arguments:
             - @annotation_reader
             - @anh_markup.parser
