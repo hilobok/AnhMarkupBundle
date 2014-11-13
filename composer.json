@@ -16,8 +16,8 @@
     "minimum-stability": "stable",
 
     "autoload":{
-        "psr-0":{
-            "Anh\\MarkupBundle": ""
+        "psr-4":{
+            "Anh\\MarkupBundle\\": ""
         }
     },
 
