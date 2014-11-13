@@ -7,6 +7,8 @@ use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Anh\MarkupBundle\Parser;
+use Anh\MarkupBundle\Mapping\Annotation\Parsable;
+use Anh\MarkupBundle\Mapping\Annotation\Countable;
 
 class ParsableListener implements EventSubscriber
 {
@@ -72,12 +74,28 @@ class ParsableListener implements EventSubscriber
                 ->getReflectionProperty($annotation->field)
                 ->getValue($entity)
             ;
+
             $options = (array) $annotation->options + array(
                 'entity' => $entity
             );
 
-            $text = $this->parser->parse($annotation->type, $markup, $options);
-            $meta->getReflectionProperty($fieldName)->setValue($entity, $text);
+            switch (true) {
+                case $annotation instanceof Parsable:
+                    $value = $this->parser->parse($annotation->type, $markup, $options);
+                    break;
+
+                case $annotation instanceof Countable:
+                    $value = $this->parser->command('countChars', $annotation->type, $markup, $options);
+                    break;
+
+                default:
+                    throw new \Exception(
+                        sprintf("Unknown annotation '%s'.", get_class($annotation))
+                    );
+                    break;
+            }
+
+            $meta->getReflectionProperty($fieldName)->setValue($entity, $value);
         }
 
         return true;
@@ -89,14 +107,16 @@ class ParsableListener implements EventSubscriber
 
         $reflection = new \ReflectionObject($entity);
 
-        foreach ($reflection->getProperties() as $field) {
-            $annotation = $this->reader->getPropertyAnnotation(
-                $field,
-                'Anh\MarkupBundle\Mapping\Annotation\Parsable'
+        foreach ($reflection->getProperties() as $property) {
+            $annotation = array_filter(
+                $this->reader->getPropertyAnnotations($property),
+                function ($annotation) {
+                    return $annotation instanceof Parsable || $annotation instanceof Countable;
+                }
             );
 
-            if ($annotation !== null) {
-                $annotations[$field->getName()] = $annotation;
+            if (!empty($annotation)) {
+                $annotations[$property->getName()] = reset($annotation);
             }
         }
 
