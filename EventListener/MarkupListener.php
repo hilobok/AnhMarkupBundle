@@ -32,7 +32,7 @@ class MarkupListener implements EventSubscriber
     {
         return array(
             Events::onFlush,
-            Events::postPersist
+            Events::postPersist,
         );
     }
 
@@ -76,7 +76,7 @@ class MarkupListener implements EventSubscriber
             ;
 
             $options = (array) $annotation->options + array(
-                'entity' => $entity
+                'entity' => $entity,
             );
 
             switch (true) {
