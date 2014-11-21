@@ -32,36 +32,29 @@ class MarkupListener implements EventSubscriber
     {
         return array(
             Events::onFlush,
-            Events::postPersist,
         );
-    }
-
-    public function postPersist(LifecycleEventArgs $args)
-    {
-        $entity = $args->getEntity();
-        $meta = $args->getEntityManager()
-            ->getClassMetadata(get_class($entity))
-        ;
-
-        if ($this->process($entity, $meta)) {
-            $args->getEntityManager()->flush($entity);
-        }
     }
 
     public function onFlush(OnFlushEventArgs $args)
     {
-        $em = $args->getEntityManager();
-        $uow = $em->getUnitOfWork();
+        $manager = $args->getEntityManager();
+        $unitOfWork = $manager->getUnitOfWork();
 
-        foreach ($uow->getScheduledEntityUpdates() as $entity) {
-            $meta = $em->getClassMetadata(get_class($entity));
-            if ($this->process($entity, $meta)) {
-                $uow->recomputeSingleEntityChangeSet($meta, $entity);
+        $entities = array_merge(
+            $unitOfWork->getScheduledEntityInsertions(),
+            $unitOfWork->getScheduledEntityUpdates()
+        );
+
+        foreach ($entities as $entity) {
+            $meta = $manager->getClassMetadata(get_class($entity));
+
+            if ($this->processEntity($entity, $meta)) {
+                $unitOfWork->recomputeSingleEntityChangeSet($meta, $entity);
             }
         }
     }
 
-    protected function process($entity, $meta)
+    protected function processEntity($entity, $meta)
     {
         $annotations = $this->getAnnotations($entity);
 

@@ -10,7 +10,7 @@ services:
             - @annotation_reader
             - @anh_markup.parser
         tags:
-            - { name: doctrine.event_subscriber }
+            - { name: doctrine.event_subscriber, priority: -16 }
 
     anh_markup.validator:
         class: %anh_markup.validator.class%
