@@ -5,7 +5,6 @@ namespace Anh\MarkupBundle\EventListener;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Anh\MarkupBundle\Parser;
 use Anh\MarkupBundle\Mapping\Annotation\Parsable;
 use Anh\MarkupBundle\Mapping\Annotation\Countable;
