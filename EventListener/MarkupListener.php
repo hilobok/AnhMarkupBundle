@@ -48,6 +48,10 @@ class MarkupListener implements EventSubscriber
             $meta = $manager->getClassMetadata(get_class($entity));
 
             if ($this->processEntity($entity, $meta)) {
+                if (is_callable([$entity, 'afterMarkupParsed'])) {
+                    $entity->afterMarkupParsed();
+                }
+
                 $unitOfWork->recomputeSingleEntityChangeSet($meta, $entity);
             }
         }
